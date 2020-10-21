@@ -52,7 +52,7 @@ spec:
   selector:
     matchLabels:
       app: realtimeapp
-  replicas: 2
+  replicas: 3
   template:
     metadata:
       labels:
