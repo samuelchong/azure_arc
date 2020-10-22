@@ -26,34 +26,34 @@ az extension list -o table
 
 # connect a cluster
 # create RG
-az group create --name rg-arc -l westeurope -o table
+az group create --name rg-arc-demo -l eastus -o table
 
 # connect
-az connectedk8s connect --name arc-kind --resource-group rg-arc
+az connectedk8s connect --name arc-kind --resource-group rg-arc-demo
 
 # verify connection
 az connectedk8s list -o table
-az connectedk8s show -g rg-arc -n arc-kind
+az connectedk8s show -g rg-arc-demo -n arc-kind
 
 # gitops config
 az k8sconfiguration create \
     --name realtime-config \
-    --cluster-name arc-kind --resource-group rg-arc \
+    --cluster-name arc-kind --resource-group rg-arc-demo \
     --operator-instance-name realtime-config --operator-namespace realtime \
-    --repository-url git@github.com:gbaeke/arc \
+    --repository-url git@github.com:DimensionDataResearch/azure-arc-kubernetes-poc.git \
     --scope namespace --cluster-type connectedClusters \
-    --operator-params='--git-path=config --git-user=user --git-email=user@example.com'
+    --operator-params='--git-path=config --git-user="user name" --git-email=user@didata.com.au'
 
 
 # list configs
-az k8sconfiguration list -g rg-arc -c arc-kind --cluster-type connectedClusters -o table
+az k8sconfiguration list -g rg-arc-demo -c arc-kind --cluster-type connectedClusters -o table
 
 # delete config
-az k8sconfiguration delete -g rg-arc -c arc-kind --cluster-type connectedClusters -n realtime-config -o table
+az k8sconfiguration delete -g rg-arc-demo -c arc-kind --cluster-type connectedClusters -n realtime-config -o table
 
 
 # deploy config with ARM template
-az deployment group create -g rg-arc --template-file arm/config-template.json --parameters arm/config-template.parameters.json 
+az deployment group create -g rg-arc-demo --template-file arm/config-template.json --parameters arm/config-template.parameters.json 
 
 # via policy - assign custom Arc policy to connected cluster object
 # issue: not working - recreated policy based on new policy example 14/5/2020
