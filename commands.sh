@@ -44,6 +44,15 @@ az k8sconfiguration create \
     --scope namespace --cluster-type connectedClusters \
     --operator-params='--git-path=config --git-user="user name" --git-email=user@didata.com.au'
 
+# gitops config2
+az k8sconfiguration create \
+    --name polling-config \
+    --cluster-name arc-kind --resource-group rg-arc-demo \
+    --operator-instance-name polling-config --operator-namespace voting \
+    --repository-url git@github.com:samuelchong/azure_arc.git \
+    --scope namespace --cluster-type connectedClusters \
+    --operator-params='--git-path=config2 --git-user="Samuel Chong" --git-email="samuel.chong@global.ntt" --git-poll-interval=10s'
+
 
 # list configs
 az k8sconfiguration list -g rg-arc-demo -c arc-kind --cluster-type connectedClusters -o table
